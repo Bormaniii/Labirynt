@@ -11,8 +11,10 @@ public class Node {
 	public int odleglosc;
 	public int i;
 	public int j;
+	public int ruch=0;
+	public Node from;
 	
-	public Node(JButton data, int i, int j, List<Node> next, int odleglosc) {
+	public Node(JButton data, int i, int j, List<Node> next) {
 		this.data=data;
 		this.next=next;
 		this.odleglosc=odleglosc;
@@ -32,6 +34,14 @@ public class Node {
 	
 	List<Node> getChild(){
 		return this.next;
+	}
+	
+	public int addOdleglosc(int odleglosc) {
+		return this.odleglosc=odleglosc;
+	}
+	
+	void Set_from(Node parent) {
+		this.from=parent;
 	}
 
 }
