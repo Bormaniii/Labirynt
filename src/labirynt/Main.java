@@ -69,64 +69,81 @@ public class Main {
 		panel.setVisible(true);
 		frame.add(panel);
 		frame.setVisible(true);
-		
-		//ustawiam przyciski, ktore maja zostac ominiete
-		Frontier.remove(parents[6][4]);
-		tablicaprzyciskow[6][4].setEnabled(false);
 
+		tablicaprzyciskow[7][4].setEnabled(false);
+		tablicaprzyciskow[6][4].setEnabled(false);
+		tablicaprzyciskow[5][4].setEnabled(false);
+		tablicaprzyciskow[4][4].setEnabled(false);
+		tablicaprzyciskow[3][4].setEnabled(false);
+		tablicaprzyciskow[1][4].setEnabled(false);
+		tablicaprzyciskow[0][4].setEnabled(false);
+		
 		int najmniej_odleg = parents[0][0].odleglosc;
 
 					List<Node> children =  parents[0][0].getChild();
-					System.out.println(children.get(0).j);
+					Frontier.add(parents[0][0]);
 					
 					Node parent = parents[0][0];
+					Node old_parent = parents[0][0];
 					
 					int ruch = 0;
 					while(!ClosedList.contains(parents[6][7])) {
+						old_parent = parent;
+						int new_odleg = 100;
+						try {
+							Thread.sleep(200);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
-						int nr_dziecka = 0; //zapamietuje wybranego child
-						int new_odleg = 0;
-						for(int a=0;a<children.size();a++) {
-							children.get(a).Set_from(parent);
-							if(Frontier.contains(parents[children.get(a).i][children.get(a).j])) {
-							System.out.println(children.get(a).i+" "+children.get(a).j);			
-								ruch++;					
-							new_odleg = children.get(a).odleglosc + ruch;
-							System.out.println("ruch: "+ruch);
-							System.out.println("odleglosc: "+children.get(a).odleglosc);
-							System.out.println("nowa odl "+new_odleg);
-							if((a+1==children.size()) && (new_odleg!=najmniej_odleg)) {
-								Frontier.remove(parents[children.get(a).i][children.get(a).j]);
-								ClosedList.add(parents[children.get(a).i][children.get(a).j]);								
-								System.out.println("po dzieciach");
+						if(Frontier.contains(parent)) {
+							for(int a=0;a<children.size();a++) {
+								if(!ClosedList.contains(children.get(a))) {
+									children.get(a).Set_from(parent);
+								Frontier.add(children.get(a));
+								}
 							}
-								if(new_odleg==najmniej_odleg) {
-									nr_dziecka=a;
-									Frontier.remove(parents[children.get(a).i][children.get(a).j]);
-									ClosedList.add(parents[children.get(a).i][children.get(a).j]);	
+							Frontier.remove(parent);
+							ClosedList.add(parent);
+							
+						}
+						for(int a=0;a<children.size();a++) {
+							if(Frontier.contains(children.get(a))) {
+								System.out.println(children.get(a).i+" "+children.get(a).j);
+								if(tablicaprzyciskow[children.get(a).i][children.get(a).j].isEnabled()==true){	
+									new_odleg = children.get(a).odleglosc + ruch +1;
+								}
+								System.out.println("odleglosc: "+children.get(a).odleglosc);
+								System.out.println("nowa odl "+new_odleg);
+								System.out.println("najmniej_odleg "+najmniej_odleg);
+							
+								if((new_odleg==najmniej_odleg) && (!ClosedList.contains(children.get(a))) && (tablicaprzyciskow[children.get(a).i][children.get(a).j].isEnabled()==true)) {
 									System.out.println("Dodano");
+									ruch++;
 									parent = children.get(a);
 									tablicaprzyciskow[children.get(a).i][children.get(a).j].setBackground(Color.GREEN);
+									children = children.get(a).getChild();
 									break;
 								}else {
 									System.out.println("nie dodano");
-									ruch--;
-									Frontier.remove(parents[children.get(a).i][children.get(a).j]);
-									ClosedList.add(parents[children.get(a).i][children.get(a).j]);									
 								}
+								
 							}
 							
 						}
-						if(new_odleg!=najmniej_odleg) {
-							children = parents[0][0].getChild();
+						if(parent==old_parent) {
+							ClosedList.add(parent);
 							System.out.println("cofam");
-							ruch=0;
-						}else {
-							
-							children = parents[children.get(nr_dziecka).i][children.get(nr_dziecka).j].getChild();	
-													
+							ruch--;
+							tablicaprzyciskow[parent.i][parent.j].setBackground(Color.BLACK);
+							children = parent.from.getChild();
+							parent = parent.from;
 						}
-							
+
+						System.out.println("ruch: "+ruch);
+						
+						
 					}
 					System.out.println("Dotarles");
 	}
