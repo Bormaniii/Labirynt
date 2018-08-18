@@ -69,13 +69,15 @@ public class Main {
 		frame.add(panel);
 		frame.setVisible(true);
 
-		tablicaprzyciskow[7][4].setEnabled(false);
+		tablicaprzyciskow[2][4].setEnabled(false);
 		tablicaprzyciskow[6][4].setEnabled(false);
 		tablicaprzyciskow[5][4].setEnabled(false);
 		tablicaprzyciskow[4][4].setEnabled(false);
 		tablicaprzyciskow[3][4].setEnabled(false);
 		tablicaprzyciskow[1][4].setEnabled(false);
 		tablicaprzyciskow[0][4].setEnabled(false);
+		tablicaprzyciskow[7][2].setEnabled(false);
+		tablicaprzyciskow[4][2].setEnabled(false);
 		
 		int najmniej_odleg = parents[0][0].odleglosc;
 
@@ -90,7 +92,7 @@ public class Main {
 						old_parent = parent;
 						int new_odleg = 100;
 						try {
-							Thread.sleep(200);
+							Thread.sleep(100);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -116,7 +118,7 @@ public class Main {
 								System.out.println("odleglosc + ruch: "+new_odleg);
 								System.out.println("najmniej_odleg "+najmniej_odleg);
 							
-								if((new_odleg==najmniej_odleg) && (!ClosedList.contains(children.get(a))) && (tablicaprzyciskow[children.get(a).i][children.get(a).j].isEnabled()==true)) {
+								if((new_odleg<=najmniej_odleg) && (!ClosedList.contains(children.get(a))) && (tablicaprzyciskow[children.get(a).i][children.get(a).j].isEnabled()==true)) {
 									System.out.println("Dodano");
 									ruch++;
 									System.out.println("ruch: "+ruch);
@@ -131,7 +133,7 @@ public class Main {
 							}
 							
 						}
-						if(parent==old_parent) {
+						if((parent==old_parent) && (parent!=parents[0][0])) {
 							Frontier.remove(parent);
 							ClosedList.add(parent);
 							System.out.println("cofam");
@@ -140,6 +142,19 @@ public class Main {
 							tablicaprzyciskow[parent.i][parent.j].setBackground(Color.BLACK);
 							children = parent.from.getChild();
 							parent = parent.from;
+						}else if((parent==old_parent) && (parent==parents[0][0])) {
+							najmniej_odleg++;
+							ClosedList.clear();
+							if(Frontier.contains(parent)) {
+								for(int a=0;a<children.size();a++) {
+									if(!ClosedList.contains(children.get(a))) {
+										children.get(a).Set_from(parent);
+									Frontier.add(children.get(a));
+									}
+								}
+								ClosedList.add(parent);
+								
+							}
 						}
 
 						
