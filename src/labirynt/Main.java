@@ -63,7 +63,6 @@ public class Main {
 				if(j+1<=7) {
 					parents[i][j].addChild(parents[i][j+1]);
 				}
-				Frontier.add(parents[i][j]);
 			}
 		}					
 		panel.setVisible(true);
@@ -104,7 +103,6 @@ public class Main {
 								Frontier.add(children.get(a));
 								}
 							}
-							Frontier.remove(parent);
 							ClosedList.add(parent);
 							
 						}
@@ -115,12 +113,13 @@ public class Main {
 									new_odleg = children.get(a).odleglosc + ruch +1;
 								}
 								System.out.println("odleglosc: "+children.get(a).odleglosc);
-								System.out.println("nowa odl "+new_odleg);
+								System.out.println("odleglosc + ruch: "+new_odleg);
 								System.out.println("najmniej_odleg "+najmniej_odleg);
 							
 								if((new_odleg==najmniej_odleg) && (!ClosedList.contains(children.get(a))) && (tablicaprzyciskow[children.get(a).i][children.get(a).j].isEnabled()==true)) {
 									System.out.println("Dodano");
 									ruch++;
+									System.out.println("ruch: "+ruch);
 									parent = children.get(a);
 									tablicaprzyciskow[children.get(a).i][children.get(a).j].setBackground(Color.GREEN);
 									children = children.get(a).getChild();
@@ -133,15 +132,16 @@ public class Main {
 							
 						}
 						if(parent==old_parent) {
+							Frontier.remove(parent);
 							ClosedList.add(parent);
 							System.out.println("cofam");
 							ruch--;
+							System.out.println("ruch: "+ruch);
 							tablicaprzyciskow[parent.i][parent.j].setBackground(Color.BLACK);
 							children = parent.from.getChild();
 							parent = parent.from;
 						}
 
-						System.out.println("ruch: "+ruch);
 						
 						
 					}
